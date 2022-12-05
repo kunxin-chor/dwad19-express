@@ -1,0 +1,54 @@
+{{#extends 'base'}}
+
+{{#block "content"}}
+<h1>Submit your feedback!</h1>
+<!-- Make sure that your form elements (i.e textboxes, radio buttons etc.)
+are within a <form></form> parent and the method must be "POST" -->
+<form method="POST">
+    <div>
+        <label>Email:</label>
+        <!-- for text boxes which value will be submitted to the server
+        MAKE SURE to give them a name -->
+        <input type="text" class="form-control" name="email" />
+    </div>
+    <div>
+        <label>Mobile Number:</label>
+        <input type="text" class="form-control" name="mobileNumber" />
+    </div>
+    <div>
+        <label>What kind of feedback you want to give</label>
+        <div>
+            <input type="radio" class="form-check-input" name="feedback" value="suggestions"><label
+                class="form-check-label">Suggestions</label>
+            <input type="radio" class="form-check-input" name="feedback" value="complaints"><label
+                class="form-check-label">Complaints</label>
+            <input type="radio" class="form-check-input" name="feedback" value="compliments"><label
+                class="form-check-label">Compliments</label>
+        </div>
+    </div>
+    <div>
+        <label>Which country are you from?</label>
+        <select name="country" class="form-control">
+            <option value="sg">Singapore</option>
+            <option value="my">Malaysia</option>
+            <option value="jp">Japan</option>
+        </select>
+    </div>
+    <div>
+        <label>Tell us how you know about us</label>
+        <input type="checkbox" name="knowAbout" value="advertising"><label>Advertising?</label>
+        <input type="checkbox" name="knowAbout" value="word_of_mouth"><label>Word of Mouth</label>
+        <input type="checkbox" name="knowAbout" value="social_media"><label>Social Media</label>
+        <input type="checkbox" name="knowAbout" value="others"><label>Others</label>
+    </div>
+
+
+
+    <!-- We must have a submit button -->
+    <input type="submit" value="Send feedback" class="btn btn-primary mt-3" />
+</form>
+
+
+{{/block}}
+
+{{/extends}}
