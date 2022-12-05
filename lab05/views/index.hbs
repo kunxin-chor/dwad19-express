@@ -1,0 +1,26 @@
+{{#extends "base"}}
+
+{{#block "content"}}
+<h1>Overpriced Fruit Juice</h1>
+
+<h2>Our Menu</h2>
+
+<h1>My Favourite Fruit is {{favorite}}</h1>
+
+{{#ifEquals favorite "Apples"}}
+    <h2>An apple a day keeps the doctor away</h2>
+{{else}}
+    <h2>You dislike Apples</h2>
+{{/ifEquals}}
+
+
+<ul>
+    {{!-- for (let this of fruits)  --}}
+    {{#each ourFruits}}
+        {{!-- this will refer to one element in the array  --}}
+        <li>{{this}}</li>
+    {{/each}}
+</ul>
+{{/block}}
+
+{{/extends}}
