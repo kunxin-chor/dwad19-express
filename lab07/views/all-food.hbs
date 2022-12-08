@@ -1,0 +1,37 @@
+{{#extends 'base'}}
+
+{{#block "content"}}
+<h1>Food Records</h1>
+
+<table class="table">
+    <!-- table header -->
+    <thead>
+        <!-- table row -->
+        <tr>
+            <!-- table header -->
+            <th>ID</th>
+            <th>Food Name</th>
+            <th>Calories</th>
+            <th>Meal</th>
+            <th>Tags</th>
+        </tr>
+    </thead>
+    <!-- actual content of the table is -->
+    <!-- table body -->
+    <tbody>
+        {{#each foodRecords}}
+        <tr>
+            <!-- one table column -->
+            <td>{{this.id}}</td>
+            <td>{{this.foodName}}</td>
+            <td>{{this.calories}}</td>
+            <td>{{this.meal}}</td>
+            <td>{{this.tags}}</td>
+        </tr>
+        {{/each}}
+    </tbody>
+</table>
+
+{{/block}}
+
+{{/extends}}

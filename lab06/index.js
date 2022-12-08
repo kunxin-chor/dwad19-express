@@ -52,12 +52,18 @@ app.post('/survey', function(req,res){
 
     console.log("selected Checkboxes =", selectedCheckboxes)
 
-    res.send(`
+    if (email && mobileNumber && feedback) {
+        res.send("Didn't fill in the whole form")
+    } else {
+        res.send(`
         Email = ${email}
         Mobile Number = ${mobileNumber}
         Feedback = ${feedback}
         Selected checkboxes = ${selectedCheckboxes}
     `);
+    }
+
+  
 })
 
 // 3. START SERVER (No routers after you've started server)
