@@ -14,6 +14,7 @@
             <th>Calories</th>
             <th>Meal</th>
             <th>Tags</th>
+            <th></th>
         </tr>
     </thead>
     <!-- actual content of the table is -->
@@ -27,6 +28,10 @@
             <td>{{this.calories}}</td>
             <td>{{this.meal}}</td>
             <td>{{this.tags}}</td>
+            <td>
+                <a href="/update-food/{{this.id}}" class="btn btn-primary btn-sm">Edit</a>
+                <a href="/delete-food/{{this.id}}" class="btn btn-danger btn-sm">Delete</a>
+            </td>
         </tr>
         {{/each}}
     </tbody>

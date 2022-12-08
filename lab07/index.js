@@ -43,7 +43,7 @@ let foodRecords = [
         "foodName":"Brown Rice Milkshake",
         "calories": 300,
         "meal":"dinner",
-        "tags":["vegan", "organic"]
+        "tags":["vegetarian", "organic"]
     },
     {
         "id": Math.floor(Math.random() * 100000 + 1),
@@ -108,6 +108,98 @@ app.post('/add-food', function(req,res){
     foodRecords.push(newFoodRecord);
 
     // redirect the client (aka) browser) to a different URL
+    res.redirect('/')
+})
+
+app.get('/update-food/:food_id', function(req,res){
+
+    // use the linear search to get the actual food record object
+    let foodRecord = null;
+    for (let eachFoodRecord of foodRecords) {
+        if (eachFoodRecord.id == req.params.food_id) {
+            foodRecord = eachFoodRecord;
+            break;
+        }
+    }
+
+  
+
+    res.render('edit-food', {
+        'foodRecord': foodRecord
+    });
+})
+
+app.post('/update-food/:food_id', function(req,res){
+    const foodName = req.body.foodName;
+    const calories = req.body.calories;
+    const meal = req.body.meal;
+
+    let selectedTags = [];
+
+    if (Array.isArray(req.body.tags)) {
+        selectedTags = req.body.tags;
+    } else if (req.body.tags){
+        selectedTags.push(req.body.tags);
+    }   
+
+    const modifiedFoodRecord = {
+        'id': req.params.food_id,
+        'foodName': foodName,
+        'calories': calories,
+        'meal': meal,
+        'tags': selectedTags
+        
+    }
+
+    // find the index of the food record that we are editing
+    let foodRecordIndex = -1; // indicate not found
+    let currentIndex = 0;
+    for (let eachFoodRecord of foodRecords) {
+        if (eachFoodRecord.id == req.params.food_id) {
+            foodRecordIndex = currentIndex;
+            break;
+        }
+        currentIndex += 1;
+    }
+
+    foodRecords[currentIndex] = modifiedFoodRecord;
+
+    res.redirect('/')
+})
+
+app.get('/delete-food/:food_id', function(req,res){
+     // use the linear search to get the actual food record object
+     let foodRecord = null;
+     for (let eachFoodRecord of foodRecords) {
+         if (eachFoodRecord.id == req.params.food_id) {
+             foodRecord = eachFoodRecord;
+             break;
+         }
+     }
+
+     res.render('delete-food', {
+        'foodRecord': foodRecord
+     })
+})
+
+app.post("/delete-food/:food_id", function(req,res){
+    // find the index of the food I am deleting
+    let foundIndex = -1;
+    for (let i = 0; i < foodRecords.length; i++) {
+        let currentFoodRecord = foodRecords[i];
+        if (currentFoodRecord.id == req.params.food_id ) {
+            foundIndex = i;
+            break;
+        }
+    }
+    // foundIndex will have the index of the food record that we want to delete
+
+    // use the splice function to delete one item in an array
+    // splice can take two parameters
+    // - parameter one: which index to start deleting
+    // - parameter two: how many to delete
+    foodRecords.splice(foundIndex, 1);
+
     res.redirect('/')
 })
 

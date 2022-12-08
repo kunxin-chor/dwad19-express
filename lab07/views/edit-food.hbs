@@ -1,0 +1,71 @@
+{{#extends "base"}}
+
+{{#block "content"}}
+<h1>Editing: {{foodRecord.foodName}}</h1>
+<form method="POST">
+    <div>
+        <label>Food Name:</label>
+        <input type="text" class="form-control" name="foodName" value="{{foodRecord.foodName}}"/>
+    </div>
+    <div>
+        <label>Calories</label>
+        <input type="text" class="form-control" name="calories" value="{{foodRecord.calories}}"/>
+    </div>
+    <div>
+        <label>Meal</label>
+
+        <input type="radio" class="form-check-input" name="meal" value="breakfast"
+         {{#eq foodRecord.meal "breakfast"}}checked{{/eq}}
+         />
+        <label>Breakfast</label>
+
+        <input type="radio" class="form-check-input" name="meal" value="lunch"
+        {{#eq foodRecord.meal "lunch"}}checked{{/eq}}
+         />
+        <label>Lunch</label>
+
+        <input type="radio" class="form-check-input" name="meal" value="dinner"
+        {{#eq foodRecord.meal "dinner"}}checked{{/eq}}
+        />
+        <label>Dinner</label>
+    </div>
+    <div>
+        <label>Tags</label>
+        
+        <input type="checkbox" class="form-check-input" name="tags" value="homecooked" 
+        {{#inArray foodRecord.tags "homecooked"}}checked{{/inArray}}
+        
+        />
+        <label>Homecooked</label>
+
+        <input type="checkbox" class="form-check-input" name="tags" value="organic"
+        {{#inArray foodRecord.tags "organic"}}checked{{/inArray}}
+        />
+        <label>Organic</label>
+
+        <input type="checkbox" class="form-check-input" name="tags" value="vegetarian"
+         {{#inArray foodRecord.tags "vegetarian"}}checked{{/inArray}}
+        />
+        <label>Vegetarian</label>
+
+        <input type="checkbox" class="form-check-input" name="tags" value="glutten-free"
+         {{#inArray foodRecord.tags "glutten-free"}}checked{{/inArray}}
+        />
+        <label>Glutten Free</label>
+
+        <input type="checkbox" class="form-check-input" name="tags" value="unhealthy"
+         {{#inArray foodRecord.tags "unhealthy"}}checked{{/inArray}}
+        />
+        <label>Unhealthy</label>
+
+    </div>
+        <input type="submit" class="btn btn-primary mt-3"/>
+</form>
+
+
+
+
+{{/block}}
+
+
+{{/extends}}
