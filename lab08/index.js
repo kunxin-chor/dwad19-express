@@ -22,7 +22,7 @@ async function connect(uri, dbname) {
 }
 
 async function main() {
-    const db = await connect(process.env.MONGO_URI, "sample_airbnb")
+    const db = await connect(process.env.MONGO_URI, "dwad19_free_food_sightings")
     // from line 19 onwards, the Mongo `client` will be ready to use
 
     // FOR DEMONSTRATION WITH THE SAMPLE_AIRBNB database
@@ -34,6 +34,73 @@ async function main() {
     //     res.send(listings);  // a normal res.send or res.render by default is status code 200
     // })
 
+     // POST route cannot be tested via the browser
+     app.post('/food_sightings', async function(req,res){
+        // TODO: validation (as an execrise for the student)
+        let description = req.body.description;
+        let food = req.body.food;
+        // when new Date() is called without an argument, then automatically
+        // it will be the server's date and time
+        let datetime = req.body.datetime ? new Date(req.body.datetime) : new Date();
+        let result = await db.collection('sightings').insertOne({
+            'description': description,
+            'food': food,
+            'datetime': datetime
+        })
+        res.status(201); // set the status code to be 201
+        res.send(result);
+    })
+
+    app.get('/food_sightings/:id', async function(req,res){
+        res.json(await db.collection('sightings').findOne({
+            '_id': ObjectId(req.params.id)
+        }))
+    })
+
+    app.get('/food_sightings', async function(req,res){
+        // base query: the query that will get ALL the documents
+        let criteria = {};
+
+        if (req.query.description) {
+            // {
+            // "description": ....    
+            //}
+            // add the `description` key to the criteria object
+            criteria['description'] = {
+                '$regex': req.query.description, '$options':'i'
+            }
+        }
+
+        if (req.query.food) {
+            criteria['food'] = {
+                '$in': [req.query.food]
+            }
+        }
+
+        let results = await db.collection('sightings').find(criteria);
+        res.status(200);
+        // ! toArray() is async
+        res.send(await results.toArray());
+    } )
+
+    // update
+    // patch vs. put (most of the time we will use put)
+    app.put('/food_sightings/:id', async function(req,res){
+        let description = req.body.description;
+        let food = req.body.food;
+        let datetime = req.body.date ? new Date(req.body.date) : new Date();
+        let results = await db.collection('sightings').updateOne({
+            '_id': ObjectId(req.params.id)
+        },{
+            '$set':{
+                'description': description,
+                'food': food,
+                'datetime': datetime
+            }
+        });
+        res.status(200);
+        res.json(results);
+    })
 }
 
 // call the main before the `app.listen`
