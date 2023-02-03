@@ -1,4 +1,5 @@
 const express = require('express');
+const { ObjectId } = require('mongodb');
 // The MongoClient is like the command line Mongo client or the one in compass
 // except this time round it's embedded in our Express
 const MongoClient = require("mongodb").MongoClient;
@@ -7,7 +8,11 @@ const MongoClient = require("mongodb").MongoClient;
 // and made them available via `process.env`
 require('dotenv').config();
 
+
+
 const app = express();
+
+app.use(express.json()); // needed to enable json
 
 // function to connect to MongoDB
 // first parameter -- the connection string (aka Mongo URI)
@@ -100,7 +105,65 @@ async function main() {
         });
         res.status(200);
         res.json(results);
+    });
+
+    // since we are adding a new comment -- CREATING something new
+    app.post("/food_sightings/:id/comments", async function(req,res){
+        // to update the document we'll use updateOne
+        // why not insertOne?
+        // we want to MODIFY an existing food_sighting by ADDING
+        // a new comment to it
+        await db.collection('sightings').updateOne({
+            "_id":ObjectId(req.params.id)
+        }, {
+            // use $push to add to comments
+            "$push":{
+                "comments": {
+                    "_id": ObjectId(), // if we use the ObjectId function without any parameters
+                                       // the ObjectId function returns a new unique _id
+                    "content": req.body.content
+                }
+            }
+        });
+
+        res.json({
+            'message': "success"
+        })
     })
+
+
+    app.put('/food/:id/comments/:noteid/', async function(req,res){
+        let newContent = req.body.content;
+        await db.collection('food_sightings').updateOne({
+            '_id':ObjectId(req.params.id),
+            'notes._id':ObjectId(req.params.comment_id)
+        },{
+            '$set':{
+                'notes.$.content': newContent
+            }
+        })
+        res.redirect(`/food/${req.params.foodid}/notes`);
+    });
+
+
+    app.delete('/food_sightings/:id/comments/:comment_id', async function(req,res){
+        await db.collection('food_sightings').updateOne({
+            _id:ObjectId(req.params.id)  // find the food sighting that we want to delete the comment from
+        }, {
+            // use $pull to remove from array
+            '$pull':{
+                'comments':{
+                    _id: ObjectId(req.params.comment_id)
+                }
+            }
+        })
+
+        res.json({
+            'message':'Success'
+        })
+    })
+
+    
 }
 
 // call the main before the `app.listen`
